@@ -13,6 +13,7 @@ import Library from "./pages/Library";
 import Auth from "./pages/Auth";
 import Subscribe from "./pages/Subscribe";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/jornada" element={<ProtectedRoute><Journey /></ProtectedRoute>} />
               <Route path="/plano" element={<ProtectedRoute><Plan /></ProtectedRoute>} />
               <Route path="/biblioteca" element={<ProtectedRoute><Library /></ProtectedRoute>} />
+              <Route path="/perfil" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

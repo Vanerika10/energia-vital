@@ -1,11 +1,11 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, MessageCircle, ClipboardList, BookOpen, User, LogOut } from "lucide-react";
+import { Home, MessageCircle, ClipboardList, BookOpen, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   const navItems = [
     { to: "/", icon: Home, label: "Início" },
@@ -51,13 +51,20 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             );
           })}
           {user ? (
-            <button
-              onClick={signOut}
+            <NavLink
+              to="/perfil"
               className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors"
             >
-              <LogOut className="h-5 w-5 text-muted-foreground" />
-              <span className="text-[11px] font-medium text-muted-foreground">Sair</span>
-            </button>
+              {location.pathname === "/perfil" && (
+                <motion.div
+                  layoutId="nav-indicator"
+                  className="absolute inset-0 rounded-xl bg-accent"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <User className={`relative z-10 h-5 w-5 transition-colors ${location.pathname === "/perfil" ? "text-primary" : "text-muted-foreground"}`} />
+              <span className={`relative z-10 text-[11px] font-medium transition-colors ${location.pathname === "/perfil" ? "text-primary" : "text-muted-foreground"}`}>Perfil</span>
+            </NavLink>
           ) : (
             <NavLink
               to="/auth"
