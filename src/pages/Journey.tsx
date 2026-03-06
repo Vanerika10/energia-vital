@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Leaf, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 import aiAvatar from "@/assets/ai-avatar.jpg";
 
 interface Message {
   id: string;
-  role: "ai" | "user";
-  text: string;
+  role: "assistant" | "user";
+  content: string;
 }
 
 const PILLARS = [
@@ -21,18 +22,18 @@ const PILLARS = [
 const INITIAL_MESSAGES: Message[] = [
   {
     id: "1",
-    role: "ai",
-    text: "Olá, querida! 🌿 Eu sou a Essência Vital, sua consultora de bem-estar natural. Estou aqui para te guiar em uma jornada de autoconhecimento e cuidado com a aromaterapia.",
+    role: "assistant",
+    content: "Olá, querida! 🌿 Eu sou a Essência Vital, sua consultora de bem-estar natural. Estou aqui para te guiar em uma jornada de autoconhecimento e cuidado com a aromaterapia.",
   },
   {
     id: "2",
-    role: "ai",
-    text: "Antes de começarmos, preciso te lembrar que nossas conversas são complementares e não substituem orientação médica profissional. Tudo bem? 💚",
+    role: "assistant",
+    content: "Antes de começarmos, preciso te lembrar que nossas conversas são complementares e não substituem orientação médica profissional. Tudo bem? 💚",
   },
   {
     id: "3",
-    role: "ai",
-    text: "Me conta, meu amor: o que te traz aqui hoje? Qual desconforto físico ou emocional você gostaria de explorar?",
+    role: "assistant",
+    content: "Me conta, meu amor: o que te traz aqui hoje? Qual desconforto físico ou emocional você gostaria de explorar?",
   },
 ];
 
@@ -43,9 +44,12 @@ const QUICK_REPLIES = [
   "Cansaço e falta de energia",
 ];
 
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+
 const Journey = () => {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [currentPillar, setCurrentPillar] = useState(0);
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -54,35 +58,99 @@ const Journey = () => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = (text?: string) => {
-    const msg = text || input.trim();
-    if (!msg) return;
+  const streamChat = async (allMessages: Message[]) => {
+    const apiMessages = allMessages.map((m) => ({
+      role: m.role,
+      content: m.content,
+    }));
 
-    const userMsg: Message = { id: Date.now().toString(), role: "user", text: msg };
-    setMessages((prev) => [...prev, userMsg]);
+    const resp = await fetch(CHAT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      },
+      body: JSON.stringify({ messages: apiMessages }),
+    });
+
+    if (!resp.ok) {
+      const errData = await resp.json().catch(() => ({}));
+      throw new Error(errData.error || "Erro ao conectar com a IA");
+    }
+
+    if (!resp.body) throw new Error("No response body");
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let textBuffer = "";
+    let assistantSoFar = "";
+    let streamDone = false;
+
+    while (!streamDone) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      textBuffer += decoder.decode(value, { stream: true });
+
+      let newlineIndex: number;
+      while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+        let line = textBuffer.slice(0, newlineIndex);
+        textBuffer = textBuffer.slice(newlineIndex + 1);
+
+        if (line.endsWith("\r")) line = line.slice(0, -1);
+        if (line.startsWith(":") || line.trim() === "") continue;
+        if (!line.startsWith("data: ")) continue;
+
+        const jsonStr = line.slice(6).trim();
+        if (jsonStr === "[DONE]") {
+          streamDone = true;
+          break;
+        }
+
+        try {
+          const parsed = JSON.parse(jsonStr);
+          const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+          if (content) {
+            assistantSoFar += content;
+            setMessages((prev) => {
+              const last = prev[prev.length - 1];
+              if (last?.role === "assistant" && last.id.startsWith("stream-")) {
+                return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistantSoFar } : m));
+              }
+              return [...prev, { id: `stream-${Date.now()}`, role: "assistant", content: assistantSoFar }];
+            });
+          }
+        } catch {
+          textBuffer = line + "\n" + textBuffer;
+          break;
+        }
+      }
+    }
+  };
+
+  const handleSend = async (text?: string) => {
+    const msg = text || input.trim();
+    if (!msg || isLoading) return;
+
+    const userMsg: Message = { id: Date.now().toString(), role: "user", content: msg };
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setInput("");
     setShowQuickReplies(false);
+    setIsLoading(true);
 
-    // Simulated AI response
-    setTimeout(() => {
-      const aiResponses = [
-        `Entendo, querida. ${msg} é algo que muitas mulheres enfrentam e pode ter raízes emocionais profundas. Vamos investigar juntas. 🌸`,
-        "Posso te fazer algumas perguntas para entender melhor o seu contexto? Isso vai me ajudar a criar um protocolo personalizado para você.",
-        "Há quanto tempo você vem sentindo isso? E como está sua rotina de sono e alimentação?",
-      ];
-      
-      aiResponses.forEach((text, i) => {
-        setTimeout(() => {
-          setMessages((prev) => [
-            ...prev,
-            { id: `ai-${Date.now()}-${i}`, role: "ai", text },
-          ]);
-          if (i === aiResponses.length - 1) {
-            setCurrentPillar((p) => Math.min(p + 1, PILLARS.length - 1));
-          }
-        }, 800 * (i + 1));
-      });
-    }, 1000);
+    try {
+      await streamChat(updatedMessages);
+      // Advance pillar every 3 user messages
+      const userMsgCount = updatedMessages.filter((m) => m.role === "user").length;
+      if (userMsgCount % 3 === 0) {
+        setCurrentPillar((p) => Math.min(p + 1, PILLARS.length - 1));
+      }
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e.message || "Erro ao processar sua mensagem");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const progress = ((currentPillar + 1) / PILLARS.length) * 100;
@@ -112,12 +180,9 @@ const Journey = () => {
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6">
         <div className="mx-auto max-w-2xl space-y-4">
-          {/* Medical disclaimer */}
           <div className="flex items-start gap-2 rounded-xl bg-terracotta-light/50 p-3 text-xs text-terracotta-dark">
             <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
-            <span>
-              Este é um serviço complementar. Não substitui orientação médica profissional.
-            </span>
+            <span>Este é um serviço complementar. Não substitui orientação médica profissional.</span>
           </div>
 
           <AnimatePresence mode="popLayout">
@@ -137,19 +202,30 @@ const Journey = () => {
                       : "bg-card text-card-foreground shadow-card rounded-bl-md"
                   }`}
                 >
-                  {msg.text}
+                  {msg.content}
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
 
-          {/* Quick replies */}
-          {showQuickReplies && (
+          {isLoading && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-wrap gap-2 pt-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex justify-start"
             >
+              <div className="bg-card text-card-foreground shadow-card rounded-2xl rounded-bl-md px-4 py-3">
+                <div className="flex gap-1">
+                  <span className="h-2 w-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="h-2 w-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="h-2 w-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "300ms" }} />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {showQuickReplies && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap gap-2 pt-2">
               {QUICK_REPLIES.map((reply) => (
                 <button
                   key={reply}
@@ -167,10 +243,7 @@ const Journey = () => {
       {/* Input */}
       <div className="border-t border-border bg-background/80 backdrop-blur-md px-4 py-3">
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
+          onSubmit={(e) => { e.preventDefault(); handleSend(); }}
           className="mx-auto flex max-w-2xl items-center gap-2"
         >
           <input
@@ -178,12 +251,13 @@ const Journey = () => {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Descreva como você está se sentindo..."
             className="flex-1 rounded-full border border-input bg-card px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            disabled={isLoading}
           />
           <Button
             type="submit"
             size="icon"
             className="h-10 w-10 shrink-0 rounded-full"
-            disabled={!input.trim()}
+            disabled={!input.trim() || isLoading}
           >
             <Send className="h-4 w-4" />
           </Button>
