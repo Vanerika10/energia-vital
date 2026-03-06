@@ -1,11 +1,11 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, MessageCircle, ClipboardList, BookOpen, User, LogOut } from "lucide-react";
+import { Home, MessageCircle, ClipboardList, BookOpen, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   const navItems = [
     { to: "/", icon: Home, label: "Início" },
