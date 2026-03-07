@@ -11,7 +11,8 @@ interface Message {
 export function useChatHistory(
   messages: Message[],
   setMessages: (msgs: Message[]) => void,
-  initialMessages: Message[]
+  initialMessages: Message[],
+  onHistoryLoaded?: (hadUserMessages: boolean) => void
 ) {
   const { user } = useAuth();
   const loaded = useRef(false);
