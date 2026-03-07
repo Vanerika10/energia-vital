@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Profile = () => {
-  const { user, hasAccess, accessUntil, signOut, checkAccess } = useAuth();
+  const { user, hasAccess, isAdmin, accessUntil, signOut, checkAccess } = useAuth();
   const navigate = useNavigate();
 
   if (!user) {
@@ -157,6 +157,16 @@ const Profile = () => {
           transition={{ delay: 0.3 }}
           className="space-y-3"
         >
+          {isAdmin && (
+            <Button
+              onClick={() => navigate("/admin")}
+              className="w-full rounded-full"
+            >
+              <Shield className="h-4 w-4 mr-2" />
+              Painel Admin
+            </Button>
+          )}
+
           <Button
             variant="outline"
             onClick={handleRefreshAccess}
