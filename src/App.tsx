@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import Subscribe from "./pages/Subscribe";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/plano" element={<ProtectedRoute><Plan /></ProtectedRoute>} />
               <Route path="/biblioteca" element={<ProtectedRoute><Library /></ProtectedRoute>} />
               <Route path="/perfil" element={<Profile />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

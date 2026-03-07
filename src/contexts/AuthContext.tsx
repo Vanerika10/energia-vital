@@ -7,6 +7,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   hasAccess: boolean;
+  isAdmin: boolean;
   accessUntil: string | null;
   checkingAccess: boolean;
   signOut: () => Promise<void>;
@@ -22,12 +23,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [accessUntil, setAccessUntil] = useState<string | null>(null);
   const [checkingAccess, setCheckingAccess] = useState(false);
 
   const checkAccess = async () => {
     if (!session) {
       setHasAccess(false);
+      setIsAdmin(false);
       setAccessUntil(null);
       return;
     }
@@ -36,6 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { data, error } = await supabase.functions.invoke("check-payment");
       if (!error && data) {
         setHasAccess(data.has_access ?? false);
+        setIsAdmin(data.is_admin ?? false);
         setAccessUntil(data.access_until ?? null);
       }
     } catch {
@@ -66,6 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       checkAccess();
     } else {
       setHasAccess(false);
+      setIsAdmin(false);
       setAccessUntil(null);
     }
   }, [session]);
@@ -75,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, hasAccess, accessUntil, checkingAccess, signOut, checkAccess }}>
+    <AuthContext.Provider value={{ user, session, loading, hasAccess, isAdmin, accessUntil, checkingAccess, signOut, checkAccess }}>
       {children}
     </AuthContext.Provider>
   );
