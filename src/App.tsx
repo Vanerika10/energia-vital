@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import Subscribe from "./pages/Subscribe";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
