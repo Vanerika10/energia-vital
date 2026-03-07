@@ -30,7 +30,7 @@ export const useTracking = () => {
           program: options.program ?? null,
           item_id: options.item_id ?? null,
           score: options.score ?? null,
-          metadata: options.metadata ?? null,
+          metadata: (options.metadata as any) ?? null,
         }]);
       } catch {
         // silencioso — tracking nunca deve quebrar a experiência
