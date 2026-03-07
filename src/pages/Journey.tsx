@@ -56,6 +56,8 @@ const Journey = () => {
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  useChatHistory(messages, setMessages, INITIAL_MESSAGES);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
