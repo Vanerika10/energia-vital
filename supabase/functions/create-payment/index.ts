@@ -24,6 +24,9 @@ serve(async (req) => {
     const user = data.user;
     if (!user?.email) throw new Error("User not authenticated");
 
+    const body = await req.json().catch(() => ({}));
+    const planType = body.planType || "onetime";
+
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",
     });
@@ -34,19 +37,25 @@ serve(async (req) => {
       customerId = customers.data[0].id;
     }
 
-    const session = await stripe.checkout.sessions.create({
+    let sessionConfig: any = {
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
-      line_items: [
-        {
-          price: "price_1T88CYH0aAPCOF1iPmNUhoOt",
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
       success_url: `${req.headers.get("origin")}/pagamento-sucesso`,
       cancel_url: `${req.headers.get("origin")}/assinar`,
-    });
+    };
+
+    if (planType === "monthly") {
+      sessionConfig.mode = "subscription";
+      sessionConfig.line_items = [{ price: "price_1T8L6kH0aAPCOF1ixssDTsgT", quantity: 1 }];
+      sessionConfig.subscription_data = {
+        cancel_at: Math.floor(Date.now() / 1000) + (90 * 24 * 60 * 60),
+      };
+    } else {
+      sessionConfig.mode = "payment";
+      sessionConfig.line_items = [{ price: "price_1T88CYH0aAPCOF1iPmNUhoOt", quantity: 1 }];
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
