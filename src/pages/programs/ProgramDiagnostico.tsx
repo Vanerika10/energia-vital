@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTracking } from "@/hooks/useTracking";
 
 const questions = [
   {
@@ -209,9 +210,13 @@ const levels = [
 ];
 
 const ProgramDiagnostico = () => {
+  const { track } = useTracking();
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [current, setCurrent] = useState(0);
   const [showResult, setShowResult] = useState(false);
+
+  // rastrear abertura uma vez
+  useState(() => { track("program_open", { program: "diagnostico" }); });
 
   const currentQ = questions[current];
   const totalAnswered = Object.keys(answers).length;
@@ -223,6 +228,8 @@ const ProgramDiagnostico = () => {
 
   const goNext = () => {
     if (isLastQuestion) {
+      const score = Object.values(answers).reduce((sum, v) => sum + v, 0) + (answers[currentQ.id] || 0);
+      track("diagnostic_complete", { program: "diagnostico", score });
       setShowResult(true);
     } else {
       setCurrent((prev) => prev + 1);

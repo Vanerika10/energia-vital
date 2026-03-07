@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronDown, ChevronUp, CheckCircle, Circle, Lock } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, CheckCircle, Circle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTracking } from "@/hooks/useTracking";
 
 const days = [
   {
@@ -226,6 +227,7 @@ const days = [
 const STORAGE_KEY = "ev_7dias_progress";
 
 const Program7Dias = () => {
+  const { track } = useTracking();
   const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>(() => {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -233,7 +235,7 @@ const Program7Dias = () => {
       return {};
     }
   });
-  const [openDay, setOpenDay] = useState<number | null>(1);
+  const [openDay, setOpenDay] = useState<number | null>(() => { track("program_open", { program: "7-dias" }); return 1; });
   const [reflections, setReflections] = useState<Record<number, string>>(() => {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY + "_reflections") || "{}");
@@ -244,6 +246,10 @@ const Program7Dias = () => {
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(completedTasks));
+    // rastrear conclusão completa (todos os 7 dias)
+    if (days.every((d) => d.tasks.every((t) => completedTasks[t.id]))) {
+      track("program_complete", { program: "7-dias" });
+    }
   }, [completedTasks]);
 
   useEffect(() => {
@@ -251,7 +257,11 @@ const Program7Dias = () => {
   }, [reflections]);
 
   const toggleTask = (taskId: string) => {
-    setCompletedTasks((prev) => ({ ...prev, [taskId]: !prev[taskId] }));
+    setCompletedTasks((prev) => {
+      const next = { ...prev, [taskId]: !prev[taskId] };
+      if (next[taskId]) track("program_task", { program: "7-dias", item_id: taskId });
+      return next;
+    });
   };
 
   const getDayCompleted = (dayNum: number) => {

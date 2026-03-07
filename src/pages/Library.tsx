@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChevronDown, ChevronUp, Droplets, Stethoscope, Heart, FlaskConical } from "lucide-react";
+import { useTracking } from "@/hooks/useTracking";
 
 type Category = "Todos" | "Oleos" | "Protocolos" | "Emocional" | "Receitas";
 
@@ -431,9 +432,15 @@ const cardBorderColor: Record<Category, string> = {
 };
 
 const Library = () => {
+  const { track } = useTracking();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<Category>("Todos");
   const [expanded, setExpanded] = useState<string | null>(null);
+
+  const handleExpand = (id: string) => {
+    if (expanded !== id) track("library_view", { program: "biblioteca", item_id: id });
+    setExpanded(expanded === id ? null : id);
+  };
 
   const filtered = articles.filter((a) => {
     const matchCat = activeCategory === "Todos" || a.category === activeCategory;
@@ -508,7 +515,7 @@ const Library = () => {
                 className={`border rounded-2xl overflow-hidden ${borderClass}`}
               >
                 <button
-                  onClick={() => setExpanded(isOpen ? null : article.id)}
+                  onClick={() => handleExpand(article.id)}
                   className="w-full px-5 py-4 flex items-start justify-between gap-3 text-left"
                 >
                   <div className="flex-1 min-w-0">
