@@ -36,6 +36,7 @@ const App = () => (
               <Route path="/plano" element={<ProtectedRoute><Plan /></ProtectedRoute>} />
               <Route path="/biblioteca" element={<ProtectedRoute><Library /></ProtectedRoute>} />
               <Route path="/perfil" element={<Profile />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
