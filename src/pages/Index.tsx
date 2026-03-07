@@ -45,7 +45,7 @@
               <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-1.5 text-sm
   font-medium text-accent-foreground mb-6">
                 <Leaf className="h-3.5 w-3.5" />
-                Sua Consultora de Bem-Estar
+                Sua Plataforma de Bem-Estar
               </span>
 
               <h1 className="text-5xl md:text-6xl font-bold leading-tight tracking-tight mb-4">
