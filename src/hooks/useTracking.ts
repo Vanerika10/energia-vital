@@ -24,7 +24,7 @@ export const useTracking = () => {
     async (event_type: EventType, options: TrackOptions = {}) => {
       if (!user) return;
       try {
-        await supabase.from("user_events" as never).insert({
+        await supabase.from("user_events").insert([{
           user_id: user.id,
           event_type,
           program: options.program ?? null,
