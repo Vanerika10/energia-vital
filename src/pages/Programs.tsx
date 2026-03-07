@@ -9,7 +9,7 @@ const programs = [
     description: "Uma jornada de 7 dias para mapear suas dores, ajustar sua rotina e criar práticas naturais de autocuidado.",
     tag: "7 dias",
     tagColor: "bg-emerald-100 text-emerald-700",
-    image: "/programa-7dias.jpg",
+    image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-7dias.jpg",
   },
   {
     to: "/programas/checklist",
@@ -17,7 +17,7 @@ const programs = [
     description: "21 ajustes simples para elevar sua qualidade de vida. Descubra onde você está e o que precisa mudar.",
     tag: "21 hábitos",
     tagColor: "bg-pink-100 text-pink-700",
-    image: "/programa-checklist.jpg",
+    image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-checklist.jpg",
   },
   {
     to: "/programas/diagnostico",
@@ -25,7 +25,7 @@ const programs = [
     description: "Descubra em qual dos 5 níveis de saúde você está realmente. Um diagnóstico honesto para mulheres que acham que estão bem.",
     tag: "Diagnóstico",
     tagColor: "bg-violet-100 text-violet-700",
-    image: "/programa-diagnostico.jpg",
+    image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-diagnostico.jpg",
   },
   {
     to: "/programas/rotina",
@@ -33,7 +33,7 @@ const programs = [
     description: "O método dos 3 blocos para viver com qualidade de vida mesmo na correria. Manhã, dia e noite em poucos minutos.",
     tag: "Método 3B",
     tagColor: "bg-amber-100 text-amber-700",
-    image: "/programa-rotina.jpg",
+    image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-rotina.jpg",
   },
 ];
 
