@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Leaf, AlertTriangle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
@@ -212,11 +213,16 @@ const Journey = () => {
                     msg.content
                   ) : (
                     <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
                       components={{
                         p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                        strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                        strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+                        em: ({ children }) => <em className="italic">{children}</em>,
+                        h1: ({ children }) => <h1 className="font-bold text-lg mt-3 mb-1">{children}</h1>,
+                        h2: ({ children }) => <h2 className="font-bold text-base mt-3 mb-1">{children}</h2>,
                         h3: ({ children }) => <h3 className="font-bold text-base mt-3 mb-1">{children}</h3>,
                         ul: ({ children }) => <ul className="list-disc pl-4 mb-2 space-y-1">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal pl-4 mb-2 space-y-1">{children}</ol>,
                         li: ({ children }) => <li>{children}</li>,
                         hr: () => <hr className="my-3 border-border" />,
                       }}
