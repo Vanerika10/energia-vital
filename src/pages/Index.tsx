@@ -59,7 +59,7 @@ const Index = () => {
               <span className="text-white italic">Vital</span>
             </h1>
             <p className="text-base md:text-lg text-white/80 leading-relaxed max-w-md mx-auto">
-              Bem-estar natural com inteligência artificial e cuidado de verdade.
+              Bem-estar natural com protocolos personalizados e cuidado de verdade.
             </p>
           </motion.div>
         </div>
