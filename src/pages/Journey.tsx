@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import aiAvatar from "@/assets/ai-avatar.jpg";
+import { useChatHistory } from "@/hooks/useChatHistory";
 
 interface Message {
   id: string;
