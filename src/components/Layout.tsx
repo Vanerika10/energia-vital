@@ -9,9 +9,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const navItems = [
     { to: "/", icon: Home, label: "Início" },
-    { to: "/biblioteca", icon: BookOpen, label: "Óleos" },
+    { to: "/biblioteca", icon: BookOpen, label: "Biblioteca" },
     { to: "/programas", icon: LayoutGrid, label: "Programas" },
-    { to: "/jornada", icon: MessageCircle, label: "Chat com Lu" },
+    { to: "/jornada", icon: MessageCircle, label: "Conversar" },
   ];
 
   return (
@@ -35,47 +35,25 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
-                <item.icon
-                  className={`relative z-10 h-5 w-5 transition-colors ${
-                    isActive ? "text-primary" : "text-muted-foreground"
-                  }`}
-                />
-                <span
-                  className={`relative z-10 text-[11px] font-medium transition-colors ${
-                    isActive ? "text-primary" : "text-muted-foreground"
-                  }`}
-                >
+                <item.icon className={`relative z-10 h-5 w-5 transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`} />
+                <span className={`relative z-10 text-[11px] font-medium transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}>
                   {item.label}
                 </span>
               </NavLink>
             );
           })}
           {user ? (
-            <NavLink
-              to="/perfil"
-              className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors"
-            >
+            <NavLink to="/perfil" className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors">
               {location.pathname === "/perfil" && (
-                <motion.div
-                  layoutId="nav-indicator"
-                  className="absolute inset-0 rounded-xl bg-accent"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
+                <motion.div layoutId="nav-indicator" className="absolute inset-0 rounded-xl bg-accent" transition={{ type: "spring", stiffness: 400, damping: 30 }} />
               )}
               <User className={`relative z-10 h-5 w-5 transition-colors ${location.pathname === "/perfil" ? "text-primary" : "text-muted-foreground"}`} />
               <span className={`relative z-10 text-[11px] font-medium transition-colors ${location.pathname === "/perfil" ? "text-primary" : "text-muted-foreground"}`}>Perfil</span>
             </NavLink>
           ) : (
-            <NavLink
-              to="/auth"
-              className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors"
-            >
+            <NavLink to="/auth" className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors">
               {location.pathname === "/auth" && (
-                <motion.div
-                  layoutId="nav-indicator"
-                  className="absolute inset-0 rounded-xl bg-accent"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
+                <motion.div layoutId="nav-indicator" className="absolute inset-0 rounded-xl bg-accent" transition={{ type: "spring", stiffness: 400, damping: 30 }} />
               )}
               <User className={`relative z-10 h-5 w-5 transition-colors ${location.pathname === "/auth" ? "text-primary" : "text-muted-foreground"}`} />
               <span className={`relative z-10 text-[11px] font-medium transition-colors ${location.pathname === "/auth" ? "text-primary" : "text-muted-foreground"}`}>Entrar</span>
