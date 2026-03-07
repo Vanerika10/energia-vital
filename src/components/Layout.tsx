@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, MessageCircle, ClipboardList, BookOpen, User } from "lucide-react";
+import { Home, MessageCircle, LayoutGrid, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -9,9 +9,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const navItems = [
     { to: "/", icon: Home, label: "Início" },
-    { to: "/jornada", icon: MessageCircle, label: "Jornada" },
-    { to: "/plano", icon: ClipboardList, label: "Meu Plano" },
-    { to: "/biblioteca", icon: BookOpen, label: "Biblioteca" },
+    { to: "/jornada", icon: MessageCircle, label: "Consultar" },
+    { to: "/programas", icon: LayoutGrid, label: "Programas" },
   ];
 
   return (
