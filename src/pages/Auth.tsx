@@ -33,8 +33,14 @@ const Auth = () => {
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) throw error;
-        toast.success("Conta criada! Redirecionando...");
-        navigate("/assinar");
+        const adminEmails = ["vanerikaamorim@gmail.com", "balsamolucianepeixoto@gmail.com"];
+        if (adminEmails.includes(email.toLowerCase())) {
+          toast.success("Bem-vinda, administradora! 🌿");
+          navigate("/");
+        } else {
+          toast.success("Conta criada! Redirecionando...");
+          navigate("/assinar");
+        }
       }
     } catch (error: any) {
       toast.error(error.message || "Erro ao processar. Tente novamente.");
