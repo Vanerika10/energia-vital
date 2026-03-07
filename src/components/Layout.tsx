@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, MessageCircle, LayoutGrid, User } from "lucide-react";
+import { Home, MessageCircle, LayoutGrid, User, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -9,8 +9,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const navItems = [
     { to: "/", icon: Home, label: "Início" },
-    { to: "/jornada", icon: MessageCircle, label: "Consultar" },
+    { to: "/biblioteca", icon: BookOpen, label: "Óleos" },
     { to: "/programas", icon: LayoutGrid, label: "Programas" },
+    { to: "/jornada", icon: MessageCircle, label: "Chat com Lu" },
   ];
 
   return (
@@ -20,7 +21,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <nav className="sticky bottom-0 z-50 border-t border-border bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-2">
           {navItems.map((item) => {
-            const isActive = location.pathname === item.to;
+            const isActive = location.pathname === item.to || (item.to !== "/" && location.pathname.startsWith(item.to));
             return (
               <NavLink
                 key={item.to}
