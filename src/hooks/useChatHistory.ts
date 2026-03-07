@@ -43,11 +43,11 @@ export function useChatHistory(
       clearTimeout(saveTimeout.current);
       saveTimeout.current = setTimeout(async () => {
         await supabase.from("chat_history").upsert(
-          {
+          [{
             user_id: user.id,
-            messages: msgs as unknown as Record<string, unknown>[],
+            messages: msgs as unknown as any,
             updated_at: new Date().toISOString(),
-          },
+          }],
           { onConflict: "user_id" }
         );
       }, 1000);
