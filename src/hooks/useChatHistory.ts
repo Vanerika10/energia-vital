@@ -31,7 +31,10 @@ export function useChatHistory(
         .maybeSingle();
 
       if (data?.messages && Array.isArray(data.messages) && data.messages.length > 0) {
-        setMessages(data.messages as unknown as Message[]);
+        const restored = data.messages as unknown as Message[];
+        setMessages(restored);
+        const hadUserMsgs = restored.some(m => m.role === "user");
+        onHistoryLoaded?.(hadUserMsgs);
       }
     })();
   }, [user]);
