@@ -6,29 +6,25 @@ const programs = [
   {
     to: "/programas/7-dias",
     title: "7 Dias para Organizar Sua Saúde",
-    description: "Uma jornada de 7 dias para mapear suas dores, ajustar sua rotina e criar práticas naturais de autocuidado.",
-    tag: "7 dias",
+    description: "Uma jornada para mapear suas dores, ajustar sua rotina e criar práticas naturais de autocuidado.",
     image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-7dias.jpg",
   },
   {
     to: "/programas/checklist",
     title: "Checklist da Mulher Saudável",
-    description: "21 ajustes simples para elevar sua qualidade de vida. Descubra onde você está e o que precisa mudar.",
-    tag: "21 hábitos",
+    description: "21 ajustes simples para elevar sua qualidade de vida e descobrir o que precisa mudar.",
     image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-checklist.jpg",
   },
   {
     to: "/programas/diagnostico",
     title: "Diagnóstico Feminino",
-    description: "Descubra em qual dos 5 níveis de saúde você está realmente. Um diagnóstico honesto para mulheres que acham que estão bem.",
-    tag: "Diagnóstico",
+    description: "Descubra em qual dos 5 níveis de saúde você está realmente — honesto e direto ao ponto.",
     image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-diagnostico.jpg",
   },
   {
     to: "/programas/rotina",
     title: "Rotina Natural para Mulheres",
-    description: "O método dos 3 blocos para viver com qualidade de vida mesmo na correria. Manhã, dia e noite em poucos minutos.",
-    tag: "Método 3B",
+    description: "Viva com qualidade mesmo na correria. Manhã, dia e noite organizados em poucos minutos.",
     image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-rotina.jpg",
   },
 ];
@@ -67,10 +63,9 @@ const Programs = () => {
                   />
                 </div>
                 <div className="p-4">
-                  <span className="text-xs font-medium text-muted-foreground">{program.tag}</span>
-                  <h3 className="font-semibold text-base mb-1 leading-snug mt-0.5">{program.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">{program.description}</p>
-                  <div className="flex items-center gap-1 mt-3 text-primary text-sm font-medium">
+                  <h3 className="font-sans font-semibold text-base mb-1 leading-snug tracking-normal">{program.title}</h3>
+                  <p className="font-sans text-muted-foreground text-sm leading-relaxed line-clamp-2">{program.description}</p>
+                  <div className="flex items-center gap-1 mt-3 text-primary text-sm font-medium font-sans">
                     Ver programa <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
