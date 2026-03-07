@@ -1,167 +1,112 @@
- import { motion } from "framer-motion";
-  import { Link } from "react-router-dom";
-  import { Leaf, Heart, Sparkles, ArrowRight } from "lucide-react";
-  import { Button } from "@/components/ui/button";
-  import heroImage from "@/assets/hero-botanical.jpg";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Leaf, LayoutGrid, MessageCircle, ArrowRight } from "lucide-react";
+import heroImage from "@/assets/hero-botanical.jpg";
 
-  const features = [
-    {
-      icon: Leaf,
-      title: "Aromaterapia Personalizada",
-      description: "Protocolos únicos baseados no seu perfil emocional e físico.",
-    },
-    {
-      icon: Heart,
-      title: "Raiz Emocional",
-      description: "Descubra as causas emocionais por trás dos seus desconfortos.",
-    },
-    {
-      icon: Sparkles,
-      title: "Acompanhamento Proativo",
-      description: "Check-ins semanais e ajustes contínuos no seu plano de bem-estar.",
-    },
-  ];
+const paths = [
+  {
+    to: "/biblioteca",
+    icon: Leaf,
+    title: "Consultar Óleos",
+    description: "Pesquise protocolos e descubra qual óleo essencial é ideal para você.",
+    color: "bg-emerald-50 text-emerald-700",
+  },
+  {
+    to: "/programas",
+    icon: LayoutGrid,
+    title: "Meus Programas",
+    description: "Inicie uma jornada de transformação com desafios e checklists guiados.",
+    color: "bg-amber-50 text-amber-700",
+  },
+  {
+    to: "/jornada",
+    icon: MessageCircle,
+    title: "Chat com a Lu",
+    description: "Tire dúvidas pontuais com a Lu, sua aromaterapeutа pessoal.",
+    color: "bg-violet-50 text-violet-700",
+  },
+];
 
-  const Index = () => {
-    return (
-      <div className="flex flex-col">
-        {/* Hero */}
-        <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-          <div className="absolute inset-0">
-            <img
-              src={heroImage}
-              alt="Óleos essenciais e plantas naturais"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
-          </div>
+const Index = () => {
+  return (
+    <div className="flex flex-col">
+      {/* Hero */}
+      <section className="relative min-h-[55vh] flex items-center overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={heroImage}
+            alt="Óleos essenciais e plantas naturais"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        </div>
 
-          <div className="relative z-10 mx-auto max-w-2xl px-6 py-20 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-1.5 text-sm
-  font-medium text-accent-foreground mb-6">
-                <Leaf className="h-3.5 w-3.5" />
-                Sua Plataforma de Bem-Estar
-              </span>
-
-              <h1 className="text-5xl md:text-6xl font-bold leading-tight tracking-tight mb-4">
-                <span className="text-gradient-hero">Essência</span>{" "}
-                <span className="text-white italic">Vital</span>
-              </h1>
-
-              <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-lg mx-auto mb-8">
-                Uma jornada de autoconhecimento e bem-estar natural, guiada por
-                inteligência artificial com o acolhimento de quem cuida de verdade.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button asChild size="lg" className="rounded-full text-base px-8 shadow-soft">
-                  <Link to="/jornada">
-                    Começar Minha Jornada
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="rounded-full text-base px-8"
-                >
-                  <Link to="/biblioteca">Explorar Biblioteca</Link>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Features */}
-        <section className="py-20 px-6">
-          <div className="mx-auto max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-14"
-            >
-              <h2 className="text-3xl md:text-4xl font-bold mb-3">
-                Como posso te ajudar?
-              </h2>
-              <p className="text-muted-foreground text-lg max-w-md mx-auto">
-                Cada jornada é única, assim como você. Descubra o que a Essência
-                Vital pode fazer por você.
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {features.map((feature, i) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15 }}
-                  className="group rounded-2xl bg-card p-7 shadow-card hover:shadow-elevated
-  transition-shadow duration-300"
-                >
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl
-  bg-accent">
-                    <feature.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="py-16 px-6">
+        <div className="relative z-10 mx-auto max-w-2xl px-6 py-16 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mx-auto max-w-2xl rounded-3xl bg-gradient-hero p-10 md:p-14 text-center
-  text-primary-foreground"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl font-bold mb-3">
-              Pronta para se reconectar?
-            </h2>
-            <p className="text-primary-foreground/80 text-lg mb-8 max-w-md mx-auto">
-              Sua jornada de bem-estar começa com uma conversa. Vamos juntas?
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight tracking-tight mb-4">
+              <span className="text-gradient-hero">Essência</span>{" "}
+              <span className="text-white italic">Vital</span>
+            </h1>
+            <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-lg mx-auto">
+              Uma jornada de autoconhecimento e bem-estar natural, guiada por
+              inteligência artificial com o acolhimento de quem cuida de verdade.
             </p>
-            <Button
-              asChild
-              size="lg"
-              variant="secondary"
-              className="rounded-full text-base px-8"
-            >
-              <Link to="/jornada">
-                Iniciar Agora
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
           </motion.div>
-        </section>
+        </div>
+      </section>
 
-        {/* Disclaimer */}
-        <section className="py-8 px-6 border-t border-border">
-          <p className="text-center text-xs text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            ⚕️ A Essência Vital é uma ferramenta complementar de bem-estar e não substitui
-            o aconselhamento, diagnóstico ou tratamento médico profissional. Consulte
-            sempre um profissional de saúde qualificado.
-          </p>
-        </section>
-      </div>
-    );
-  };
+      {/* 3 caminhos */}
+      <section className="px-6 py-10 -mt-8 relative z-10">
+        <div className="mx-auto max-w-2xl">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-center text-sm text-muted-foreground mb-6 font-medium"
+          >
+            O que você precisa hoje?
+          </motion.p>
+          <div className="flex flex-col gap-4">
+            {paths.map((path, i) => (
+              <motion.div
+                key={path.to}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.1 }}
+              >
+                <Link
+                  to={path.to}
+                  className="flex items-center gap-4 rounded-2xl bg-card p-5 shadow-sm hover:shadow-md transition-shadow duration-300 group"
+                >
+                  <div className={`flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl ${path.color}`}>
+                    <path.icon className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-base leading-snug">{path.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{path.description}</p>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-  export default Index;
+      {/* Disclaimer */}
+      <section className="py-8 px-6 border-t border-border">
+        <p className="text-center text-xs text-muted-foreground max-w-xl mx-auto leading-relaxed">
+          ⚕️ A Essência Vital é uma ferramenta complementar de bem-estar e não substitui
+          o aconselhamento, diagnóstico ou tratamento médico profissional. Consulte
+          sempre um profissional de saúde qualificado.
+        </p>
+      </section>
+    </div>
+  );
+};
+
+export default Index;
