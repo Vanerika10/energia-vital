@@ -8,7 +8,6 @@ const programs = [
     title: "7 Dias para Organizar Sua Saúde",
     description: "Uma jornada de 7 dias para mapear suas dores, ajustar sua rotina e criar práticas naturais de autocuidado.",
     tag: "7 dias",
-    tagColor: "bg-emerald-100 text-emerald-700",
     image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-7dias.jpg",
   },
   {
@@ -16,7 +15,6 @@ const programs = [
     title: "Checklist da Mulher Saudável",
     description: "21 ajustes simples para elevar sua qualidade de vida. Descubra onde você está e o que precisa mudar.",
     tag: "21 hábitos",
-    tagColor: "bg-pink-100 text-pink-700",
     image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-checklist.jpg",
   },
   {
@@ -24,7 +22,6 @@ const programs = [
     title: "Diagnóstico Feminino",
     description: "Descubra em qual dos 5 níveis de saúde você está realmente. Um diagnóstico honesto para mulheres que acham que estão bem.",
     tag: "Diagnóstico",
-    tagColor: "bg-violet-100 text-violet-700",
     image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-diagnostico.jpg",
   },
   {
@@ -32,7 +29,6 @@ const programs = [
     title: "Rotina Natural para Mulheres",
     description: "O método dos 3 blocos para viver com qualidade de vida mesmo na correria. Manhã, dia e noite em poucos minutos.",
     tag: "Método 3B",
-    tagColor: "bg-amber-100 text-amber-700",
     image: "https://raw.githubusercontent.com/Vanerika10/energia-vital/main/public/programa-rotina.jpg",
   },
 ];
@@ -63,18 +59,16 @@ const Programs = () => {
                 to={program.to}
                 className="block group rounded-2xl overflow-hidden bg-card shadow-sm hover:shadow-md transition-shadow duration-300"
               >
-                <div className="relative h-44 overflow-hidden">
+                <div className="w-full aspect-[16/10] overflow-hidden">
                   <img
                     src={program.image}
                     alt={program.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
                   />
-                  <span className={`absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full ${program.tagColor}`}>
-                    {program.tag}
-                  </span>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-base mb-1 leading-snug">{program.title}</h3>
+                  <span className="text-xs font-medium text-muted-foreground">{program.tag}</span>
+                  <h3 className="font-semibold text-base mb-1 leading-snug mt-0.5">{program.title}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">{program.description}</p>
                   <div className="flex items-center gap-1 mt-3 text-primary text-sm font-medium">
                     Ver programa <ArrowRight className="w-4 h-4" />
