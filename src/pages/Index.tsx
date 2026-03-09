@@ -75,14 +75,15 @@ const Index = () => {
           >
             <Link
               to="/assinar"
-              className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 p-4 shadow-lg hover:shadow-xl transition-all duration-300 group"
+              style={{ background: "linear-gradient(to right, #e11d48, #db2777)" }}
+              className="flex items-center gap-4 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 group"
             >
-              <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm">
+              <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl" style={{ background: "rgba(255,255,255,0.2)" }}>
                 <Star className="w-5 h-5 text-white fill-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-base text-white leading-snug">Assine e Tenha Acesso Completo</h3>
-                <p className="text-white/80 text-sm leading-relaxed mt-0.5">A partir de R$47/mês · Cancele quando quiser</p>
+                <h3 className="font-bold text-base leading-snug" style={{ color: "#ffffff" }}>Assine e Tenha Acesso Completo</h3>
+                <p className="text-sm leading-relaxed mt-0.5" style={{ color: "rgba(255,255,255,0.85)" }}>A partir de R$47/mês · Cancele quando quiser</p>
               </div>
               <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-all flex-shrink-0" />
             </Link>
