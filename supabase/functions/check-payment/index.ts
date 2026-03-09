@@ -87,10 +87,10 @@ serve(async (req) => {
     });
 
     const hasAccess = sessions.data.some(
-      (s) => s.payment_status === "paid" && s.created >= ninetyDaysAgo
+      (s: any) => s.payment_status === "paid" && s.created >= ninetyDaysAgo
     );
 
-    const latestPaidSession = sessions.data.find(s => s.payment_status === "paid");
+    const latestPaidSession = sessions.data.find((s: any) => s.payment_status === "paid");
     let accessUntil = null;
     if (latestPaidSession) {
       accessUntil = new Date((latestPaidSession.created + 90 * 24 * 60 * 60) * 1000).toISOString();
