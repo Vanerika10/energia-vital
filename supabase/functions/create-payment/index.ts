@@ -48,7 +48,7 @@ serve(async (req) => {
       sessionConfig.mode = "subscription";
       sessionConfig.line_items = [{ price: "price_1T8L6kH0aAPCOF1ixssDTsgT", quantity: 1 }];
       sessionConfig.subscription_data = {
-        cancel_at: Math.floor(Date.now() / 1000) + (90 * 24 * 60 * 60),
+        metadata: { cancel_after_months: "3" },
       };
     } else {
       sessionConfig.mode = "payment";
