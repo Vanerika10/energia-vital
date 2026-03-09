@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Check, Leaf, Shield, Clock, CreditCard, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const sharedBenefits = [
   "Consultoria personalizada com IA",
@@ -15,6 +17,17 @@ const NEXANO_MENSAL = "https://checkout.nexano.com.br/checkout/cmmjodmj505n11snx
 const NEXANO_TRIMESTRAL = "https://checkout.nexano.com.br/checkout/cmmjodmj505n11snxlet0pn6b?offer=Q96HUGG";
 
 const Subscribe = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleCheckout = (url: string) => {
+    if (!user) {
+      navigate("/auth?redirect=/assinar");
+      return;
+    }
+    window.open(url, "_blank");
+  };
+
   return (
     <div className="flex min-h-[calc(100vh-65px)] items-center justify-center px-4 py-12">
       <motion.div
@@ -62,10 +75,8 @@ const Subscribe = () => {
                 </div>
               ))}
             </div>
-            <Button asChild className="w-full rounded-full text-base py-6" size="lg">
-              <a href={NEXANO_TRIMESTRAL} target="_blank" rel="noopener noreferrer">
-                Pagar A Vista
-              </a>
+            <Button onClick={() => handleCheckout(NEXANO_TRIMESTRAL)} className="w-full rounded-full text-base py-6" size="lg">
+              Pagar A Vista
             </Button>
           </div>
 
@@ -92,10 +103,8 @@ const Subscribe = () => {
                 </div>
               ))}
             </div>
-            <Button asChild variant="outline" className="w-full rounded-full text-base py-6" size="lg">
-              <a href={NEXANO_MENSAL} target="_blank" rel="noopener noreferrer">
-                Assinar Mensal
-              </a>
+            <Button onClick={() => handleCheckout(NEXANO_MENSAL)} variant="outline" className="w-full rounded-full text-base py-6" size="lg">
+              Assinar Mensal
             </Button>
           </div>
         </div>
