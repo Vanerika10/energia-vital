@@ -3,9 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Leaf, LayoutGrid, MessageCircle, ArrowRight, BookOpen, Star, Check, Shield, Clock, Sparkles, CreditCard, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useState } from "react";
 import heroImage from "@/assets/hero-botanical.jpg";
 
 const paths = [
@@ -47,28 +44,18 @@ const sharedBenefits = [
 const Index = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState<string | null>(null);
 
-  const handleSubscribe = async (planType: "onetime" | "monthly") => {
+
+  const NEXANO_MENSAL = "https://checkout.nexano.com.br/checkout/cmmjodmj505n11snxlet0pn6b?offer=HR7J7S2";
+  const NEXANO_TRIMESTRAL = "https://checkout.nexano.com.br/checkout/cmmjodmj505n11snxlet0pn6b?offer=Q96HUGG";
+
+  const handleSubscribe = (planType: "onetime" | "monthly") => {
     if (!user) {
-      navigate("/auth");
+      navigate(`/auth?plan=${planType}`);
       return;
     }
-    setLoading(planType);
-    try {
-      const { data, error } = await supabase.functions.invoke("create-payment", {
-        body: { planType },
-      });
-      if (error) throw error;
-      if (data?.url) {
-        window.location.href = data.url;
-      }
-    } catch (error: any) {
-      toast.error("Erro ao processar pagamento. Tente novamente.");
-      console.error(error);
-    } finally {
-      setLoading(null);
-    }
+    const url = planType === "onetime" ? NEXANO_TRIMESTRAL : NEXANO_MENSAL;
+    window.open(url, "_blank");
   };
 
   // Logged-in user view
