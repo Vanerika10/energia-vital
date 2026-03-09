@@ -160,7 +160,7 @@ const Auth = () => {
               className="w-full rounded-full"
               disabled={loading}
             >
-              {loading ? "Carregando..." : isLogin ? "Entrar" : "Criar Conta"}
+              {loading ? "Carregando..." : isLogin ? "Entrar na plataforma" : "Criar minha conta e ir para o pagamento"}
             </Button>
           </form>
 
