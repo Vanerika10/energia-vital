@@ -220,8 +220,8 @@ const Index = () => {
                     </div>
                   ))}
                 </div>
-                <Button onClick={() => handleSubscribe("onetime")} disabled={loading !== null} className="w-full rounded-full text-base py-6" size="lg">
-                  {loading === "onetime" ? "Processando..." : "Pagar À Vista"}
+                <Button onClick={() => handleSubscribe("onetime")} className="w-full rounded-full text-base py-6" size="lg">
+                  Pagar À Vista
                 </Button>
               </div>
             </motion.div>
@@ -251,8 +251,8 @@ const Index = () => {
                     </div>
                   ))}
                 </div>
-                <Button onClick={() => handleSubscribe("monthly")} disabled={loading !== null} variant="outline" className="w-full rounded-full text-base py-6" size="lg">
-                  {loading === "monthly" ? "Processando..." : "Assinar Mensal"}
+                <Button onClick={() => handleSubscribe("monthly")} variant="outline" className="w-full rounded-full text-base py-6" size="lg">
+                  Assinar Mensal
                 </Button>
               </div>
             </motion.div>
