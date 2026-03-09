@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Leaf, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Leaf, Mail, Lock, Eye, EyeOff, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,6 +15,9 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
+  const isFromCheckout = redirectTo === "/assinar";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +28,7 @@ const Auth = () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Bem-vinda de volta! 🌿");
-        navigate("/");
+        navigate(redirectTo);
       } else {
         const { error } = await supabase.auth.signUp({
           email,
@@ -77,6 +80,24 @@ const Auth = () => {
             {isLogin ? "Entre na sua conta" : "Crie sua conta e comece sua jornada"}
           </p>
         </div>
+
+        {isFromCheckout && (
+          <div className="rounded-2xl p-4 mb-6 text-sm text-center" style={{ background: "rgba(16,120,80,0.08)", border: "1px solid rgba(16,120,80,0.2)" }}>
+            <ShoppingBag className="h-5 w-5 mx-auto mb-2 text-primary" />
+            {isLogin ? (
+              <p className="text-foreground">
+                <strong>Já é assinante?</strong> Entre com seu login e senha para acessar a plataforma.
+                <br /><span className="text-muted-foreground text-xs">Ainda não assinou? Clique em <strong>Cadastre-se</strong> abaixo.</span>
+              </p>
+            ) : (
+              <p className="text-foreground">
+                <strong>Passo 1 de 2 — Crie seu acesso</strong>
+                <br />Cadastre seu e-mail e senha. Eles serão seu login no app.
+                <br /><span className="text-muted-foreground text-xs">Após criar a conta, você será direcionada para escolher seu plano e pagar.</span>
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="rounded-2xl bg-card p-6 shadow-card space-y-5">
           <Button
