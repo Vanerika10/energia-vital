@@ -16,8 +16,16 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/";
-  const isFromCheckout = redirectTo === "/assinar";
+  const plan = searchParams.get("plan");
+  const isFromCheckout = !!plan;
+
+  const NEXANO_MENSAL = "https://checkout.nexano.com.br/checkout/cmmjodmj505n11snxlet0pn6b?offer=HR7J7S2";
+  const NEXANO_TRIMESTRAL = "https://checkout.nexano.com.br/checkout/cmmjodmj505n11snxlet0pn6b?offer=Q96HUGG";
+
+  const goToCheckout = () => {
+    const url = plan === "onetime" ? NEXANO_TRIMESTRAL : NEXANO_MENSAL;
+    window.location.href = url;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +36,8 @@ const Auth = () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Bem-vinda de volta! 🌿");
-        navigate(redirectTo);
+        if (isFromCheckout) { goToCheckout(); return; }
+        navigate("/");
       } else {
         const { error } = await supabase.auth.signUp({
           email,
@@ -41,7 +50,8 @@ const Auth = () => {
           toast.success("Bem-vinda, administradora! 🌿");
           navigate("/");
         } else {
-          toast.success("Conta criada! Redirecionando...");
+          toast.success("Conta criada! Redirecionando para o pagamento...");
+          if (isFromCheckout) { goToCheckout(); return; }
           navigate("/assinar");
         }
       }
@@ -77,7 +87,7 @@ const Auth = () => {
             </span>
           </div>
           <p className="text-muted-foreground text-sm">
-            {isLogin ? "Já tem cadastro? Entre para acessar a plataforma." : "Novo por aqui? Crie seu login e senha, eles serão usados para acessar o app após o pagamento."}
+            {isLogin ? "Entre na sua conta" : "Crie sua conta e comece sua jornada"}
           </p>
         </div>
 
@@ -160,7 +170,7 @@ const Auth = () => {
               className="w-full rounded-full"
               disabled={loading}
             >
-              {loading ? "Carregando..." : isLogin ? "Entrar na plataforma" : "Criar minha conta e ir para o pagamento"}
+              {loading ? "Carregando..." : isLogin ? "Entrar" : "Criar Conta"}
             </Button>
           </form>
 
