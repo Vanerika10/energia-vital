@@ -77,7 +77,7 @@ const Auth = () => {
             </span>
           </div>
           <p className="text-muted-foreground text-sm">
-            {isLogin ? "Entre na sua conta" : "Crie sua conta e comece sua jornada"}
+            {isLogin ? "Já tem cadastro? Entre para acessar a plataforma." : "Novo por aqui? Crie seu login e senha, eles serão usados para acessar o app após o pagamento."}
           </p>
         </div>
 
