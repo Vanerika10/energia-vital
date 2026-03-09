@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -53,7 +53,6 @@ serve(async (req) => {
     } else {
       sessionConfig.mode = "payment";
       sessionConfig.line_items = [{ price: "price_1T88CYH0aAPCOF1iPmNUhoOt", quantity: 1 }];
-      sessionConfig.payment_method_types = ["card", "pix"];
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
