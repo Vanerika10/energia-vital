@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Leaf, LayoutGrid, MessageCircle, ArrowRight, BookOpen } from "lucide-react";
+import { Leaf, LayoutGrid, MessageCircle, ArrowRight, BookOpen, Star } from "lucide-react";
 import heroImage from "@/assets/hero-botanical.jpg";
 
 const paths = [
@@ -65,8 +65,33 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Assinatura */}
+      <section className="px-5 pt-6 -mt-6 relative z-10">
+        <div className="mx-auto max-w-lg">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Link
+              to="/assinar"
+              className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 p-4 shadow-lg hover:shadow-xl transition-all duration-300 group"
+            >
+              <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm">
+                <Star className="w-5 h-5 text-white fill-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-base text-white leading-snug">Assine e Tenha Acesso Completo</h3>
+                <p className="text-white/80 text-sm leading-relaxed mt-0.5">A partir de R$47/mês · Cancele quando quiser</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-all flex-shrink-0" />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
       {/* 3 caminhos */}
-      <section className="px-5 py-8 -mt-6 relative z-10 pb-32">
+      <section className="px-5 py-8 relative z-10 pb-32">
         <div className="mx-auto max-w-lg">
           <motion.p
             initial={{ opacity: 0 }}
