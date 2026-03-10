@@ -364,6 +364,16 @@ const Admin = () => {
         {/* ── USUARIOS TAB ── */}
         {tab === "users" && (
           <div className="space-y-5">
+            {/* Instrucoes */}
+            <div className="rounded-2xl p-4 border text-sm" style={{ background: "rgba(16,120,80,0.06)", borderColor: "rgba(16,120,80,0.2)" }}>
+              <p className="font-semibold text-foreground mb-1">Como funciona o acesso manual?</p>
+              <ol className="space-y-1 text-muted-foreground list-decimal list-inside text-xs leading-relaxed">
+                <li>A pessoa precisa <strong>primeiro criar a conta dela</strong> no site (e-mail e senha) — você não consegue fazer isso por ela.</li>
+                <li>Depois que ela criou a conta, você digita o e-mail dela aqui embaixo e clica em <strong>Conceder Acesso</strong>.</li>
+                <li>O acesso é liberado por <strong>90 dias</strong> automaticamente.</li>
+              </ol>
+            </div>
+
             {/* Grant access form */}
             <div className="rounded-2xl bg-card p-5 border border-border">
               <div className="flex items-center gap-2 mb-4">
