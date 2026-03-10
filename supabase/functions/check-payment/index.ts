@@ -1,11 +1,12 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+const ADMIN_EMAILS = ["vanerikaamorim@gmail.com", "balsamolucianepeixoto@gmail.com"];
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -28,7 +29,15 @@ serve(async (req) => {
     const user = userData.user;
     if (!user?.email) throw new Error("User not authenticated");
 
-    // Check if user is admin
+    // Verifica se e admin pelo email (fallback seguro)
+    if (ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+      return new Response(JSON.stringify({ has_access: true, is_admin: true, access_until: null }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
+
+    // Verifica na tabela user_roles
     const { data: roleData } = await supabaseClient
       .from("user_roles")
       .select("role")
@@ -36,17 +45,14 @@ serve(async (req) => {
       .eq("role", "admin")
       .maybeSingle();
 
-    const isAdmin = !!roleData;
-
-    // Admins always have access
-    if (isAdmin) {
+    if (roleData) {
       return new Response(JSON.stringify({ has_access: true, is_admin: true, access_until: null }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
     }
 
-    // Check manual access
+    // Verifica acesso manual
     const { data: manualAccess } = await supabaseClient
       .from("manual_access")
       .select("expires_at")
@@ -65,41 +71,12 @@ serve(async (req) => {
       });
     }
 
-    // Check Stripe payment
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2025-08-27.basil",
-    });
-
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    if (customers.data.length === 0) {
-      return new Response(JSON.stringify({ has_access: false, is_admin: false }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      });
-    }
-
-    const customerId = customers.data[0].id;
-    const ninetyDaysAgo = Math.floor((Date.now() - 90 * 24 * 60 * 60 * 1000) / 1000);
-
-    const sessions = await stripe.checkout.sessions.list({
-      customer: customerId,
-      limit: 10,
-    });
-
-    const hasAccess = sessions.data.some(
-      (s: any) => s.payment_status === "paid" && s.created >= ninetyDaysAgo
-    );
-
-    const latestPaidSession = sessions.data.find((s: any) => s.payment_status === "paid");
-    let accessUntil = null;
-    if (latestPaidSession) {
-      accessUntil = new Date((latestPaidSession.created + 90 * 24 * 60 * 60) * 1000).toISOString();
-    }
-
-    return new Response(JSON.stringify({ has_access: hasAccess, is_admin: false, access_until: accessUntil }), {
+    // Sem acesso
+    return new Response(JSON.stringify({ has_access: false, is_admin: false }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
+
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(JSON.stringify({ error: errorMessage }), {
