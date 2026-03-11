@@ -42,7 +42,7 @@ export type Database = {
         Row: {
           expires_at: string
           granted_at: string | null
-          granted_by: string
+          granted_by: string | null
           id: string
           user_email: string
           user_name: string | null
@@ -50,7 +50,7 @@ export type Database = {
         Insert: {
           expires_at: string
           granted_at?: string | null
-          granted_by: string
+          granted_by?: string | null
           id?: string
           user_email: string
           user_name?: string | null
@@ -58,7 +58,7 @@ export type Database = {
         Update: {
           expires_at?: string
           granted_at?: string | null
-          granted_by?: string
+          granted_by?: string | null
           id?: string
           user_email?: string
           user_name?: string | null
